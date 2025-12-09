@@ -2,65 +2,53 @@ using UnityEngine;
 
 public class Gozilla : MonoBehaviour
 {
-    [Header("Movimiento")]
-    public float velocidadInicial = 5f;      // Velocidad al empezar
-    public float velocidadMaxima = 15f;      // Máxima que quieres que alcance
-    public float tiempoHastaMax = 60f;       // Segundos que tarda en llegar a la máxima
-
     [Header("Salto")]
     public float fuerzaSalto = 15f;
+    // Puedes ajustar la gravedad en el Rigidbody2D para que el salto se sienta bien
+    // con la nueva perspectiva estática.
 
-    private float velocidad;                 // Velocidad actual
-    private float aceleracion;               // Calculada en Start
     private Rigidbody2D rb;
     private bool enSuelo = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        // Empezamos a la velocidad inicial
-        velocidad = velocidadInicial;
-
-        // Aceleración: de velocidadInicial a velocidadMaxima en "tiempoHastaMax" segundos
-        if (tiempoHastaMax > 0)
-        {
-            aceleracion = (velocidadMaxima - velocidadInicial) / tiempoHastaMax;
-        }
-        else
-        {
-            aceleracion = 0f;
-        }
+        // IMPORTANTE: Asegúrate en el editor de Unity, en el Rigidbody2D, 
+        // que en Constraints -> Freeze Position X esté marcado.
     }
 
     void Update()
     {
-        // INPUT de salto aquí para no perder pulsaciones
+        // INPUT de salto
         if (enSuelo && Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0f);
-            rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
-            enSuelo = false;
+            Saltar();
         }
     }
 
-    void FixedUpdate()
+    void Saltar()
     {
-        // Aumentar velocidad de forma SUAVE y limitada
-        if (velocidad < velocidadMaxima)
-        {
-            velocidad += aceleracion * Time.fixedDeltaTime;
-        }
-
-        // Movimiento constante hacia la derecha
-        rb.velocity = new Vector2(velocidad, rb.velocity.y);
+        // Reseteamos la velocidad vertical actual para que el salto sea consistente
+        // incluso si estamos bajando un poco una pendiente.
+        rb.velocity = new Vector2(0f, rb.velocity.y); 
+        
+        // Aplicamos la fuerza hacia arriba
+        rb.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
+        enSuelo = false;
     }
 
+    // --- Detección de Suelo ---
+    // Usar Tags es correcto. Asegúrate que tus objetos de suelo tengan el tag "Ground".
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Ground"))
         {
-            enSuelo = true;
+            // Verificación extra opcional: asegurar que el contacto es por debajo del personaje
+            // para evitar que salte si toca una pared lateral.
+            if (collision.contacts[0].normal.y > 0.5f)
+            {
+                 enSuelo = true;
+            }
         }
     }
 
