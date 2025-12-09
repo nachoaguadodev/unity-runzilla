@@ -60,10 +60,10 @@ public class Ghost : MonoBehaviour
         }
     }
 
-    /* private void OnTriggerEnter (Collider other){
+    private void OnTriggerEnter (Collider other){
         Destroy(other.gameObject);
         Destroy(this.gameObject);
-    }*/
+    }
 
     private void OnDestroy(){
         Debug.Log("Nooooo");
