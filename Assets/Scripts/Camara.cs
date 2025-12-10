@@ -1,42 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Camara : MonoBehaviour
 {
-    public Transform target;
-    public Gozilla player;  // tu script del jugador
-    public float baseAhead = 2f;
-    public float aheadPerSpeed = 0.1f;
-    public float smoothSpeed = 0.15f;
+    // Ya no necesitamos target ni velocidades de seguimiento
+    // porque la cámara se quedará FRENADA en el sitio.
 
-    void LateUpdate()
-    {
-        if (target == null || player == null) return;
-
-        float aheadDistance = baseAhead * aheadPerSpeed;
-
-        float targetX = target.position.x + aheadDistance;
-
-        Vector3 desiredPosition = new Vector3(
-            targetX,
-            transform.position.y,
-            transform.position.z
-        );
-
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-    }
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+        // Opcional: Forzar la posición al iniciar para asegurar que siempre está igual
+        // transform.position = new Vector3(0, 0, -10); 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // VACÍO. La cámara no debe moverse.
+        // El movimiento lo hace el FONDO y el SUELO.
     }
 }
