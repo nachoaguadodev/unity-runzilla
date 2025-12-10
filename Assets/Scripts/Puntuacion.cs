@@ -1,43 +1,70 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Puntutacion : MonoBehaviour
+public class Puntuacion : MonoBehaviour
 {
-    // Hacemos la puntuación float para acumular decimales, aunque mostremos enteros
+    public static Puntuacion Instance; // Singleton para acceder fácil desde la moneda
+
     public float puntuacionActual = 0f;
-    
     public TextMeshProUGUI textoPuntos;
     
-    // Cuántos puntos te dan por cada unidad de distancia recorrida
-    public float multiplicadorPuntos = 1f;      
+    [Header("Bonus Moneda")]
+    public TextMeshProUGUI textoBonus; // Arrastra aquí el texto que dice "+100"
+    public float multiplicadorPuntos = 1f;
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+    }
+
+    void Start()
+    {
+        // Al empezar, escondemos el texto de bonus
+        if(textoBonus != null) textoBonus.gameObject.SetActive(false);
+    }
 
     void Update()
     {
-        // 1. Verificamos que el Manager de velocidad exista
         if (BGMOVEMENT.Instance == null) return;
 
-        // 2. Calculamos cuánta distancia hemos "avanzado" en este frame
-        // Fórmula: Distancia = Velocidad * Tiempo
+        // Puntuación por distancia
         float velocidad = BGMOVEMENT.Instance.velocidadActual;
-        float distanciaRecorridaEsteFrame = velocidad * Time.deltaTime;
+        puntuacionActual += velocidad * Time.deltaTime * multiplicadorPuntos;
 
-        // 3. Sumamos esa distancia a la puntuación
-        puntuacionActual += distanciaRecorridaEsteFrame * multiplicadorPuntos;
-
-        // 4. Actualizamos el texto (quitando los decimales para que se vea limpio)
-        if (textoPuntos != null)
-        {
-            // "F0" significa sin decimales. "D5" rellenaría con ceros (ej: 00123)
-            textoPuntos.text = Mathf.FloorToInt(puntuacionActual).ToString();
-        }
+        ActualizarUI();
     }
 
-    // Método extra por si quieres sumar puntos extra al coger monedas
-    public void SumarPuntosExtra(int puntos)
+    void ActualizarUI()
     {
-        puntuacionActual += puntos;
+        if (textoPuntos != null)
+            textoPuntos.text = Mathf.FloorToInt(puntuacionActual).ToString();
+    }
+
+    // --- ESTA ES LA FUNCIÓN NUEVA ---
+    public void SumarMoneda()
+    {
+        // 1. Sumar 100 puntos
+        puntuacionActual += 100;
+        
+        // 2. Mostrar efecto visual
+        if(textoBonus != null)
+        {
+            StopAllCoroutines(); // Si ya había uno activo, lo reseteamos
+            StartCoroutine(MostrarTextoBonus());
+        }
+        
+        // Aquí podrías poner un sonido: AudioSource.PlayOneShot(sonidoMoneda);
+    }
+
+    IEnumerator MostrarTextoBonus()
+    {
+        textoBonus.gameObject.SetActive(true);
+        textoBonus.text = "+100"; // Aseguramos que diga 100
+        
+        // Esperamos 1 segundo
+        yield return new WaitForSeconds(1f);
+        
+        textoBonus.gameObject.SetActive(false);
     }
 }
