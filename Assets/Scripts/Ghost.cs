@@ -21,22 +21,22 @@ public class Ghost : MonoBehaviour
         // Detectar tipo de fantasma según su nombre
         if (gameObject.name.Contains("fantasma0"))
         {
-            velocidad = 5f;
+            velocidad = 0.5f;
             direccion = Vector3.left;
         }
         else if (gameObject.name.Contains("fantasma1"))
         {
-            velocidad = 8f;
+            velocidad = 1f;
             direccion = Vector3.left; 
         }
         else if (gameObject.name.Contains("fantasma2"))
         {
-            velocidad = 3f;
+            velocidad = 1.5f;
             direccion = Vector3.left; 
         }
         else if (gameObject.name.Contains("fantasma3"))
         {
-            velocidad = 10f;
+            velocidad = 2f;
             direccion = Vector3.left; 
         }
 

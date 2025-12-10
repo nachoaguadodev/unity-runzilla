@@ -25,7 +25,7 @@ public class InstanciarFantasmas : MonoBehaviour
         while (true)
         {
             generarFantasmas();
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(3f);
         }
     }
 
@@ -54,8 +54,8 @@ public class InstanciarFantasmas : MonoBehaviour
         );
 
         // ➤ Instanciamos el fantasma justo fuera del borde derecho
-        GameObject a = Instantiate(ghost);
-        a.transform.position = new Vector3(bordeDerecho + 1f, alturaAleatoria, 0f);
+        Instantiate(ghost, new Vector3(bordeDerecho + 1f, alturaAleatoria, 0f),Quaternion.identity);
+       
     }
     
 
