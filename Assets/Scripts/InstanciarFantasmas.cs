@@ -54,7 +54,7 @@ public class InstanciarFantasmas : MonoBehaviour
         );
 
         // ➤ Instanciamos el fantasma justo fuera del borde derecho
-        Instantiate(ghost, new Vector3(bordeDerecho + 1f, alturaAleatoria, 0f),Quaternion.identity);
+        Instantiate(ghost, new Vector3(bordeDerecho + 20f, alturaAleatoria, 0f),Quaternion.identity);
        
     }
     
