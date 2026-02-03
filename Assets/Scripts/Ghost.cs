@@ -55,7 +55,7 @@ public class Ghost : MonoBehaviour
         this.transform.Translate(direccion * velocidad * Time.deltaTime);
         
         //Para que se destruya a sí mismo al salir de pantalla
-        if (this.transform.position.x < limiteIzdo -30f){
+        if (this.transform.position.x < limiteIzdo -2f){
             Destroy(this.gameObject);
         }
     }
