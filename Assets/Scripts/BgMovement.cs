@@ -1,14 +1,12 @@
 using UnityEngine;
 
-// HUBIERA SIDO MEJOR RENOMBRAR EL ARCHIVO A "GameSpeedController", 
-// PERO MANTENGO "BGMOVEMENT" PARA QUE COINCIDA CON TU ARCHIVO EXISTENTE.
 public class BGMOVEMENT : MonoBehaviour
 {
-    public static BGMOVEMENT Instance; // Singleton para acceso fácil
+    public static BGMOVEMENT Instance; // Singleton
 
     [Header("Configuración de Velocidad Global")]
     public float velocidadInicial = 5f;      // Velocidad al empezar
-    public float velocidadMaxima = 15f;      // Máxima que quieres que alcance
+    public float velocidadMaxima = 15f;      // Máxima que queremos que alcance
     public float tiempoHastaMax = 60f;       // Segundos que tarda en llegar a la máxima
 
     [HideInInspector]
@@ -18,7 +16,6 @@ public class BGMOVEMENT : MonoBehaviour
 
     void Awake()
     {
-        // Configuración básica del Singleton
         if (Instance == null)
         {
             Instance = this;
@@ -31,10 +28,8 @@ public class BGMOVEMENT : MonoBehaviour
 
     void Start()
     {
-        // Empezamos a la velocidad inicial
         velocidadActual = velocidadInicial;
 
-        // Cálculo de la aceleración (igual que tenías antes)
         if (tiempoHastaMax > 0)
         {
             aceleracion = (velocidadMaxima - velocidadInicial) / tiempoHastaMax;
@@ -47,14 +42,12 @@ public class BGMOVEMENT : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Si el juego no está pausado (puedes añadir esa lógica luego), aumentamos la velocidad
         if (velocidadActual < velocidadMaxima)
         {
             velocidadActual += aceleracion * Time.fixedDeltaTime;
         }
     }
 
-    // Método opcional si quieres detener todo al morir
     public void StopGame()
     {
         velocidadActual = 0;

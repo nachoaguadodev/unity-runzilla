@@ -7,8 +7,7 @@ public class MovimientoObstaculo : MonoBehaviour
 
     void Start()
     {
-        // 1. Calcular el ancho para evitar superposiciones
-        // Intentamos obtener el Collider (más preciso) o el Sprite
+        // Intentamos obtener el Collider
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         if (col != null)
         {
@@ -25,11 +24,11 @@ public class MovimientoObstaculo : MonoBehaviour
     {
         if (BGMOVEMENT.Instance == null) return;
 
-        // 2. Moverse a la izquierda a la velocidad del juego
+        // Moverse a la izquierda a la velocidad del juego
         float velocidad = BGMOVEMENT.Instance.velocidadActual;
         transform.Translate(Vector3.left * velocidad * Time.deltaTime);
 
-        // 3. Autodestrucción si sale de la pantalla
+        //Autodestrucción si sale de la pantalla
         if (transform.position.x < -25f)
         {
             Destroy(gameObject);
