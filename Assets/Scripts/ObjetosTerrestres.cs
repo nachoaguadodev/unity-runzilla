@@ -4,7 +4,6 @@ public class ObjetosTerrestres : MonoBehaviour
 {
     public GameObject[] obstaculos;
 
-    [Header("Configuración de Distancia")]
     // Distancia mínima y máxima entre el final de un obstáculo y el principio del siguiente
     public float distanciaMinima = 3f; 
     public float distanciaMaxima = 7f;
@@ -15,7 +14,6 @@ public class ObjetosTerrestres : MonoBehaviour
     {
         if (BGMOVEMENT.Instance == null) return;
 
-        // Restamos tiempo
         tiempoParaSiguienteSpawn -= Time.deltaTime;
 
         if (tiempoParaSiguienteSpawn <= 0f)
@@ -26,15 +24,14 @@ public class ObjetosTerrestres : MonoBehaviour
 
     void GenerarObstaculo()
     {
-        // 1. Elegir obstáculo aleatorio
+        // Elegimos obstáculo aleatorio
         int indice = Random.Range(0, obstaculos.Length);
         GameObject prefabElegido = obstaculos[indice];
 
-        // 2. Instanciarlo en la posición de este Generador
-        // Usamos Z=0 para que choque con el jugador
+        // Instanciamos en la posición de este Generador
         GameObject nuevoObstaculo = Instantiate(prefabElegido, transform.position, Quaternion.identity);
 
-        // 3. CALCULAR TIEMPO INTELIGENTE (Anti-Superposición)
+        // Evitar Superposición
         // Obtenemos el script del obstáculo para saber su ancho
         MovimientoObstaculo scriptMov = nuevoObstaculo.GetComponent<MovimientoObstaculo>();
         float anchoObstaculo = 1f; // Valor por defecto por seguridad
@@ -47,19 +44,18 @@ public class ObjetosTerrestres : MonoBehaviour
             if(col != null) anchoObstaculo = col.size.x * prefabElegido.transform.localScale.x;
         }
 
-        // 4. La Fórmula Mágica: Tiempo = Distancia / Velocidad
         float velocidadActual = BGMOVEMENT.Instance.velocidadActual;
         
-        // Si la velocidad es 0 (juego parado), evitamos división por cero
+        // Si la velocidad es 0, evitamos división por cero
         if (velocidadActual <= 0) velocidadActual = 1f;
 
         float distanciaExtra = Random.Range(distanciaMinima, distanciaMaxima);
         
-        // El tiempo de espera es: lo que tarda en pasar el ancho del objeto + la distancia extra
+        // El tiempo de espera eslo que tarda en pasar el ancho del objeto + la distancia extra
         tiempoParaSiguienteSpawn = (anchoObstaculo + distanciaExtra) / velocidadActual;
     }
     
-    // Dibujo visual para saber dónde está el spawner
+    // Dibujo para saber dónde está el spawner
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
