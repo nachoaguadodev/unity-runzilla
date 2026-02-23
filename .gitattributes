@@ -1,0 +1,6 @@
+# GitHub ignora los shaders en las estadísticas
+*.shader linguist-vendored
+*.cginc linguist-vendored
+*.hlsl linguist-vendored
+*.compute linguist-vendored
+*.glsl linguist-vendored
