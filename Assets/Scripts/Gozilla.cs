@@ -58,7 +58,7 @@ public class Godzilla : MonoBehaviour
         }
 
         // SALTO
-        if (Input.GetKeyDown(KeyCode.Space) && enSuelo)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && enSuelo) 
         {
             Saltar();
         }
@@ -106,10 +106,18 @@ public class Godzilla : MonoBehaviour
 
     void AjustarGravedad()
     {
+        // 1. Guardamos en una variable si el jugador está manteniendo CUALQUIERA de los controles
+        bool manteniendoSalto = Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0) || Input.touchCount > 0;
+
         if (rb.velocity.y < 0)
+        {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (multiplicadorCaida - 1) * Time.deltaTime;
-        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+        }
+        // 2. Ahora comprobamos nuestra nueva variable en lugar de solo el Space
+        else if (rb.velocity.y > 0 && !manteniendoSalto)
+        {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (multiplicadorSaltoCorto - 1) * Time.deltaTime;
+        }
     }
 
     void ReproducirSonido(AudioClip clip)
@@ -138,6 +146,7 @@ public class Godzilla : MonoBehaviour
     IEnumerator SecuenciaMuerte()
     {
         estaMuerto = true;
+        ReproducirSonido(sonidoChoque);
         if (BGMOVEMENT.Instance != null)
         {
             BGMOVEMENT.Instance.StopGame(); 

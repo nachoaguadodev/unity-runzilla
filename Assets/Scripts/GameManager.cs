@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate = 120;
         audioSourceGM = GetComponent<AudioSource>();
         if (audioSourceGM == null) audioSourceGM = gameObject.AddComponent<AudioSource>();
 
